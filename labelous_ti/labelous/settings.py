@@ -64,7 +64,7 @@ ROOT_URLCONF = 'labelous.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ["./../label_app/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
