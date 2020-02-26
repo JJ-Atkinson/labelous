@@ -1,0 +1,28 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>My Annotations</title>
+    <meta name="description" content="The HTML5 Herald">
+    <meta name="author" content="SitePoint">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+</head>
+
+<body>
+<h1>My Annotations</h1>
+
+{% for url_pair in image_urls %}
+    <a href="{{url_pair.href}}">
+        <div style="display:inline-block; margin-top:10px;width:25%;">
+            <img src="{{url_pair.imgHref}}"/>
+        </div>
+    </a>
+{% endfor %}
+
+
+</body>
+</html>

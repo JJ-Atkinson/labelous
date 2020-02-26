@@ -3,6 +3,7 @@ from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import SuspiciousOperation
+from django.template.loader import render_to_string
 from django.db import transaction
 
 from xml.sax.saxutils import escape as xml_escape
@@ -462,19 +463,26 @@ def prev_annotation(request):
 # show all the annotations the user has
 def annotation_list(request):
     # this should be done with the templating engine but we are cowboys rn
-    out = ["<html><head><title>My Annotations</title></head><body>"
-        "<h1>My Annotations</h1>"]
+#     out = ["<html><head><title>My Annotations</title></head><body>"
+#         "<h1>My Annotations</h1>"]
 
     the_annotations = models.Annotation.objects.order_by('pk').filter(
         annotator=request.user, deleted=False)
 
-    for anno in the_annotations:
-        link = ("label/#collection=LabelMe&mode=f&folder=f"
-            "&image=img{}.jpg&username=hi&actions=a".format(anno.image.pk))
-        out.append("<a href='{}'>"
-            "<div style='display:inline-block; margin-top:10px; width:25%;'>"
-            "<img src='label/Images/f/img{}.jpg' style='width:100%;'>"
-            "</div></a><br>".format(link, anno.image.pk))
-    out.append("</body></html>")
+#     for anno in the_annotations:
+#         link = ("label/#collection=LabelMe&mode=f&folder=f"
+#             "&image=img{}.jpg&username=hi&actions=a".format(anno.image.pk))
 
-    return HttpResponse(out)
+#         out.append("<a href='{}'>"
+#             "<div style='display:inline-block; margin-top:10px; width:25%;'>"
+#             "<img src='label/Images/f/img{}.jpg' style='width:100%;'>"
+#             "</div></a><br>".format(link, anno.image.pk))
+     
+     the_annotations = [{"href": ("label/#collection=LabelMe&mode=f&folder=f"
+                                 "&image=img{}.jpg&username=hi&actions=a".format(anno.image.pk))
+                         "imgHref": "label/Images/f/img{}.jpg".format(anno.image.pk)}
+                         for anno in the_annotations]
+
+     out = render_to_string("my_annotation.html", {"image_urls": anno})
+     
+     return HttpResponse(out)
